@@ -75,7 +75,7 @@ function search_api_revisions_entity_presave(EntityInterface $entity) {
   $entity_revision_key = $entity_type->getKey('revision');
   $entity_id_key = $entity_type->getKey('id');
 
-  $select = \Drupal::database()->select('node_field_revision', 'et');
+  $select = \Drupal::database()->select($entity_table, 'et');
   $select->addField('et', $entity_revision_key, 'revision');
   $select->condition($entity_id_key, $entity->id());
   foreach ($select->execute()->fetchAll() as $item) {
@@ -117,7 +117,7 @@ function search_api_revisions_entity_update(EntityInterface $entity) {
       $index->trackItemsInserted($datasource_id, $insert_ids);
     }
     if (!empty($entity->search_api_revisions_update_ids)) {
-      $index->trackItemsDeleted($datasource_id, $entity->search_api_revisions_update_ids);
+      $index->trackItemsUpdated($datasource_id, $entity->search_api_revisions_update_ids);
     }
   }
 }
